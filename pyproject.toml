@@ -1,0 +1,21 @@
+[project]
+name = "landscapes-classification"
+version = "0.1.0"
+description = "Neural networks based solution for landscapes classification"
+authors = [
+    {name = "Vladislav Semenov",email = "vliusemenov@edu.hse.ru"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "dvc[s3] (>=3.65.0,<4.0.0)",
+    "hydra-core (>=1.3.2,<2.0.0)",
+    "pytorch-lightning (>=2.6.0,<3.0.0)",
+    "pre-commit (>=4.5.1,<5.0.0)",
+    "torchvision (>=0.24.1,<0.25.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
