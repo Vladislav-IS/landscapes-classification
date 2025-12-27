@@ -1,4 +1,5 @@
 [core]
     remote = landscapes
 ['remote "landscapes"']
-    url = gdrive://1utaxixQt_jo_DBPmdp1j3lgM3IVy3qw5
+    url = s3://mlops-vliusemenov
+    endpointurl = https://storage.yandexcloud.net
