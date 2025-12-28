@@ -1,5 +1,0 @@
-[core]
-    remote = landscapes
-['remote "landscapes"']
-    url = s3://mlops-vliusemenov
-    endpointurl = https://storage.yandexcloud.net
