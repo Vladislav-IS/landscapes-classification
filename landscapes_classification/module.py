@@ -1,44 +1,31 @@
 from typing import Any
 
+import git
+import hydra
 import pytorch_lightning as pl
 import torchmetrics
-from torch import nn, optim
-from torchvision.models import EfficientNet_B3_Weights, efficientnet_b3
-
-
-class BaselineNet(nn.Module):
-    def __init__(self, in_size, hidden_size, out_size):
-        self.seq = nn.Sequential(
-            nn.Conv2d(in_channels=in_size, out_channels=hidden_size, kernel_size=5, padding=2),
-            nn.BatchNorm2d(hidden_size),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=5),
-            nn.MaxPool2d(kernel_size=3),
-            nn.Flatten(),
-            nn.Linear(in_features=hidden_size, out_features=out_size),
-        )
-
-    def forward(self, x):
-        return self.seq(x)
-
-
-class EfficientNet(nn.Module):
-    def __init__(self, out_size):
-        self.model = efficientnet_b3(EfficientNet_B3_Weights.IMAGENET1K_V1)
-        self.model.classifier[1] = nn.Linear(
-            self.model.classifier[1].in_features, num_classes=out_size
-        )
-
-    def forward(self, x):
-        return self.model(x)
+from models import BaselineNet, EfficientNet
+from omegaconf import DictConfig
+from torch import nn
 
 
 class LandscapesModule(pl.LighningModule):
-    def __init__(self, model: nn.Module, num_classes: int):
+    def __init__(self, cfg: DictConfig):
         super().__init__()
-        self.model = model
+        self.save_hyperparameters()
+        self.cfg = cfg
+        if cfg.model.model_name == "baseline":
+            self.model = BaselineNet(3, cfg.model.hidden_size, cfg.model.num_calsses)
+        else:
+            self.model = EfficientNet(cfg.model.num_calsses)
         self.criterion = nn.CrossEntropyLoss()
-        self.metric = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
+        self.metric = torchmetrics.Accuracy(task="multiclass", num_classes=cfg.model.num_classes)
+        try:
+            repo = git.Repo(search_parent_directories=True)
+            commit_id = repo.head.object.hexsha[:7]
+            self.logger.experiment.set_tag("git_commit", commit_id)
+        except Exception:
+            self.logger.experiment.set_tag("git_commit", "unknown")
 
     def train_step(self, batch: Any):
         inputs, target = batch
@@ -80,4 +67,4 @@ class LandscapesModule(pl.LighningModule):
         )
 
     def configure_optimizers(self):
-        return optim.Adam(self.model.parameters(), lr=1e-4)
+        return hydra.utils.instantiate(self.cfg.train_params.optimizer, params=self.parameters())

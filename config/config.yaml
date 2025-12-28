@@ -1,0 +1,6 @@
+defaults:
+  - logging: logging
+  - model: model
+  - data: data
+  - callbacks: callbacks
+  - train_params: train_params
