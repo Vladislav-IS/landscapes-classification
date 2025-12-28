@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import hydra
 import pytorch_lightning as pl
 from datamodule import LandscapesDataModule
@@ -6,10 +8,17 @@ from omegaconf import DictConfig
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import MLFlowLogger, TensorBoardLogger
 
+from data import dvc_pull
+
 
 @hydra.main(version_base=None, config_path="../config", config_name="config")
 def main(cfg: DictConfig):
     print(cfg)
+
+    data_path = Path(cfg.data.train_dir).parent
+    if not data_path.is_dir():
+        dvc_pull()
+
     datamodule = LandscapesDataModule(cfg)
     module = LandscapesModule(cfg)
 

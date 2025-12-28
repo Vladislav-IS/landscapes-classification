@@ -1,29 +1,18 @@
-import shutil
-from pathlib import Path
+import subprocess
 from typing import Any
 
-import dvc.api
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
 
-def dvc_pull(repo_url: str, data_path: str, local_dir: str, rev: str) -> bool:
-    local_path = Path(local_dir)
-    if local_path.rglob("*.jpg"):
+def dvc_pull() -> None:
+    try:
+        subprocess.run(["poetry", "run", "dvc", "pull"], check=True, text=True, capture_output=True)
+        return True
+    except Exception as e:
+        print(f"DVC pull failed with error: {str(e)}")
         return False
-    local_path.mkdir(exist_ok=True)
-    files = dvc.api.read_dir(path=data_path, repo=repo_url, rev=rev)
-    if not files:
-        return False
-    for file_path in files:
-        full_path = f"{data_path}/{file_path}"
-        local_file = local_path / file_path
-        local_file.parent.mkdir(parents=True, exist_ok=True)
-        with dvc.api.open(full_path, repo=repo_url, rev=rev, mode="rb") as f_remote:
-            with open(local_file, "wb") as f_local:
-                shutil.copyfileobj(f_remote, f_local)
-    return True
 
 
 def init_dataset(path: str, mode: str, size: int) -> ImageFolder:
@@ -49,4 +38,5 @@ def init_dataloader(
         batch_size=batch_size,
         shuffle=shuffle,
         num_workers=num_workers,
+        persistent_workers=True,
     )
