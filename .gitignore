@@ -209,4 +209,7 @@ __marimo__/
 # Other stuff
 *.txt
 *.png
-/data
+data/
+outputs/
+tensorboard/
+mlflow/
