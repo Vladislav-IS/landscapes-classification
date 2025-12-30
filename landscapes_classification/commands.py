@@ -38,10 +38,7 @@ def main():
     """
     Separation of Hydra and Fire arguments
     """
-    if len(sys.argv) > 2:
-        overrides = [argv for argv in sys.argv[2:] if not argv.startswith("--")]
-    else:
-        overrides = []
+    overrides = [argv for argv in sys.argv[2:] if not argv.startswith("--")]
     sys.argv = sys.argv[:2] + [argv for argv in sys.argv[2:] if argv.startswith("--")]
     fire.Fire(Commands(overrides))
 
