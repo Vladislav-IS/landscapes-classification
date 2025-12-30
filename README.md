@@ -137,3 +137,6 @@ poetry run python ./landscapes_classification/commands.py train
 ```
 poetry run python ./landscapes_classification/commands.py infer
 ```
+
+Параметры обучения (архитектуру модели, пути сохранения логов и т.п.) можно задавать путем редактирования
+YAML-файлов в конфигурации Hydra.
