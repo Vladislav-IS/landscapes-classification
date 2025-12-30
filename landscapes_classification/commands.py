@@ -15,7 +15,7 @@ class Commands:
     """
 
     def __init__(self, overrides: List[str]):
-        self.overrides = [override for override in overrides if not override.startswith("--")]
+        self.overrides = overrides
 
     def train(self):
         with initialize_config_dir(
