@@ -7,11 +7,12 @@ from torchvision.datasets import ImageFolder
 
 
 def dvc_pull() -> None:
+    print("Data folder not found. Downloading data from the S3 storage...")
     try:
         subprocess.run(["poetry", "run", "dvc", "pull"], check=True, text=True, capture_output=True)
         return True
     except Exception as e:
-        print(f"DVC pull failed with error: {str(e)}")
+        print(f"Critical: DVC pull failed with error: {str(e)}")
         return False
 
 

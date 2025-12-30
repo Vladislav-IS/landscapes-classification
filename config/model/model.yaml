@@ -1,4 +1,11 @@
-model_name: "baseline"
-hidden_size: 256
-num_classes: 6
-adaptive_pool_size: 4
+model_name: "baseline_net"
+output_file: "model.pth"
+
+baseline_net:
+  _target_: landscapes_classification.models.BaselineNet
+  adaptive_pool_size: 4
+  hidden_size: 32
+
+efficient_net:
+  _target_: landscapes_classification.models.EfficientNetB3
+  use_pretrained: True

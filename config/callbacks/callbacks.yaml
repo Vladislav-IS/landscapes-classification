@@ -1,2 +1,2 @@
-dir_path: "./checkpoints"
-file_name: "{epoch:02d}-{val_loss:.4f}"
+dir_path: "checkpoints"
+file_name: "Best_model"
