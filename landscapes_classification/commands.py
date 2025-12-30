@@ -3,8 +3,8 @@ from pathlib import Path
 import fire
 from hydra import compose, initialize_config_dir
 
-from landscapes_classification.infer_command import infer_command
-from landscapes_classification.train_command import train_command
+from landscapes_classification.command_funcs.infer import infer_command
+from landscapes_classification.command_funcs.train import train_command
 
 
 class Commands:

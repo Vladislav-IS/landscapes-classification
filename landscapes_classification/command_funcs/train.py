@@ -3,22 +3,21 @@ from pathlib import Path
 import hydra
 import pytorch_lightning as pl
 import torch
-from data_utilities import dvc_pull
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import ModelCheckpoint
 
-from landscapes_classification import user_callbacks
-from landscapes_classification.data_module import LandscapesDataModule
-from landscapes_classification.module import LandscapesModule
+from landscapes_classification.data_utilities import dvc_pull
+from landscapes_classification.lightning import data_module, user_callbacks
+from landscapes_classification.lightning.module import LandscapesModule
 
 
 def train_command(cfg: DictConfig) -> None:
-    repo_path = Path(__file__).parents[1]
+    repo_path = Path(__file__).parents[2]
     full_data_path = repo_path / cfg.data.train_dir
     if not full_data_path.is_dir() and not dvc_pull():
         return
 
-    datamodule = LandscapesDataModule(cfg)
+    datamodule = data_module.LandscapesDataModule(cfg)
     module = LandscapesModule(cfg)
 
     logger = hydra.utils.instantiate(cfg.logging.train_logger)
