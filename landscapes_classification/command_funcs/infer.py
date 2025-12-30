@@ -3,9 +3,9 @@ from pathlib import Path
 import hydra
 import pytorch_lightning as pl
 import torch
-from landscape_classification.data_utilities import dvc_pull
 from omegaconf import DictConfig
 
+from landscapes_classification.data_utilities import dvc_pull
 from landscapes_classification.lightning import data_module, user_callbacks
 from landscapes_classification.lightning.module import LandscapesModule
 
