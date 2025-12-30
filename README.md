@@ -155,6 +155,8 @@ poetry run python ./landscapes_classification/commands.py train
 poetry run python ./landscapes_classification/commands.py infer
 ```
 
+Результаты обучения (чекпоинты, веса модели и т.п.) сохраняются локально.
+
 Параметры обучения (архитектуру модели, пути сохранения логов и т.п.) можно
 задавать путем редактирования YAML-файлов в конфигурации Hydra. Назначение
 большей части YAML-параметров кажется понятным, однако некоторые параметры,
@@ -167,8 +169,8 @@ poetry run python ./landscapes_classification/commands.py infer
   автоматически по завершении обучения.
 
 При запуске `commands.py` из командной строки можно переопределять параметры
-конфигурации. В этом случае параметры должны иметь вид `hydra_param=value`.
-Например, команда:
+конфигурации. В этом случае новые параметры должны иметь вид
+`hydra_param=value`. Например, команда:
 
 ```
 poetry run python .\landscapes_classification\commands.py infer train_params.test_batch_size=128
