@@ -1,5 +1,5 @@
 model_name: "baseline_net"
-output_file: "model.pth"
+output_file: "model_weights/model.pth"
 
 baseline_net:
   _target_: landscapes_classification.models.BaselineNet

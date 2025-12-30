@@ -55,6 +55,9 @@ def train_command(cfg: DictConfig) -> None:
     trainer.fit(module, datamodule=datamodule)
     module = LandscapesModule.load_from_checkpoint(
         model_checkpoint.best_model_path,
-        # weights_only=False,
+        weights_only=False,
     )
-    torch.save(module.model.state_dict(), cfg.model.output_file)
+    model_output_path = repo_path / cfg.model.output_file
+    if not model_output_path.parent.exists():
+        model_output_path.parent.mkdir(parents=True, exist_ok=True)
+    torch.save(module.model.state_dict(), str(model_output_path))
