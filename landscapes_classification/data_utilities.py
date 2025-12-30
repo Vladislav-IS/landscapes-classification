@@ -7,6 +7,12 @@ from torchvision.datasets import ImageFolder
 
 
 def dvc_pull() -> None:
+    """
+    Pull the data from remote repository
+
+    :return:
+    :rtype: bool
+    """
     print("Data folder not found. Downloading data from the S3 storage...")
     try:
         subprocess.run(["poetry", "run", "dvc", "pull"], check=True, text=True, capture_output=True)
@@ -17,11 +23,22 @@ def dvc_pull() -> None:
 
 
 def init_dataset(path: str, mode: str, size: int) -> ImageFolder:
+    """
+    Create dataset from raw data
+
+    :param path: Path to data folder
+    :type path: str
+    :param mode: Mode of dataset (train/val/test)
+    :type mode: str
+    :param size: Size of image after preprocessing
+    :type size: int
+    :return: Prepared PyTorch Dataset
+    :rtype: ImageFolder
+    """
     if mode == "train":
         transformer = transforms.Compose(
             [
                 transforms.RandomHorizontalFlip(),
-                transforms.RandomVerticalFlip(),
                 transforms.Resize(size),
                 transforms.ToTensor(),
             ]
@@ -34,6 +51,20 @@ def init_dataset(path: str, mode: str, size: int) -> ImageFolder:
 def init_dataloader(
     dataset: Any, batch_size: int, shuffle: bool = True, num_workers: int = 4
 ) -> DataLoader:
+    """
+    Create dataloader from prepared dataset
+
+    :param dataset: Prepared Dataset
+    :type dataset: Any
+    :param batch_size: Size of batch
+    :type batch_size: int
+    :param shuffle: Flag of shuffling the data
+    :type shuffle: bool
+    :param num_workers: Workers number
+    :type num_workers: int
+    :return: Prepared PyTorch Dataloader
+    :rtype: DataLoader
+    """
     return DataLoader(
         dataset,
         batch_size=batch_size,

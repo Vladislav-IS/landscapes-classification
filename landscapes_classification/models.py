@@ -3,6 +3,10 @@ from torchvision.models import EfficientNet_B3_Weights, efficientnet_b3
 
 
 class BaselineNet(nn.Module):
+    """
+    Baseline neural network implementation
+    """
+
     def __init__(self, hidden_size, adaptive_pool_size, num_classes):
         super().__init__()
         self.seq = nn.Sequential(
@@ -28,6 +32,10 @@ class BaselineNet(nn.Module):
 
 
 class EfficientNetB3(nn.Module):
+    """
+    EfficientNet B3 implementation
+    """
+
     def __init__(self, use_pretrained, num_classes):
         super().__init__()
         if use_pretrained:

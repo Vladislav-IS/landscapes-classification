@@ -8,6 +8,10 @@ from landscapes_classification.command_funcs.train import train_command
 
 
 class Commands:
+    """
+    Entrypoint functions class
+    """
+
     def train(self):
         with initialize_config_dir(
             version_base=None, config_dir=str(Path(__file__).parents[1] / "config")

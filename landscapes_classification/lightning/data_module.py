@@ -7,6 +7,10 @@ from landscapes_classification import data_utilities
 
 
 class LandscapesDataModule(pl.LightningDataModule):
+    """
+    Custom LightninDataModule implementation
+    """
+
     def __init__(self, cfg: DictConfig):
         super().__init__()
         self.cfg = cfg

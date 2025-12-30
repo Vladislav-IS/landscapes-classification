@@ -6,6 +6,10 @@ from omegaconf import DictConfig
 
 
 class LandscapesModule(pl.LightningModule):
+    """
+    Custom LightningModule implementation
+    """
+
     def __init__(self, cfg: DictConfig):
         super().__init__()
         self.save_hyperparameters()
@@ -21,16 +25,16 @@ class LandscapesModule(pl.LightningModule):
     def forward(self, x):
         return self.model(x)
 
-    def training_step(self, batch: Any):
+    def _get_and_log_outputs(self, batch: Any, mode: str):
         inputs, target = batch
         outputs = self.forward(inputs)
         loss = self.criterion(outputs, target)
-        self.log("train_loss", loss, prog_bar=True, logger=True, on_step=False, on_epoch=True)
+        self.log(f"{mode}_loss", loss, prog_bar=True, logger=True, on_step=False, on_epoch=True)
         preds = outputs.argmax(dim=-1)
-        accuracy = self.metric(preds, target)
+        metric = self.metric(preds, target)
         self.log(
-            "train_accuracy",
-            accuracy,
+            f"{mode}_metric",
+            metric,
             prog_bar=True,
             logger=True,
             on_step=False,
@@ -38,37 +42,14 @@ class LandscapesModule(pl.LightningModule):
         )
         return loss
 
+    def training_step(self, batch: Any):
+        return self._get_and_log_outputs(batch, "train")
+
     def validation_step(self, batch: Any):
-        inputs, target = batch
-        outputs = self.forward(inputs)
-        loss = self.criterion(outputs, target)
-        self.log("val_loss", loss, prog_bar=True, logger=True, on_step=False, on_epoch=True)
-        preds = outputs.argmax(dim=-1)
-        accuracy = self.metric(preds, target)
-        self.log(
-            "val_accuracy",
-            accuracy,
-            prog_bar=True,
-            logger=True,
-            on_step=False,
-            on_epoch=True,
-        )
+        self._get_and_log_outputs(batch, "val")
 
     def test_step(self, batch: Any):
-        inputs, target = batch
-        outputs = self.forward(inputs)
-        loss = self.criterion(outputs, target)
-        self.log("test_loss", loss, prog_bar=True, logger=True, on_step=False, on_epoch=True)
-        preds = outputs.argmax(dim=-1)
-        accuracy = self.metric(preds, target)
-        self.log(
-            "test_accuracy",
-            accuracy,
-            prog_bar=True,
-            logger=True,
-            on_step=False,
-            on_epoch=True,
-        )
+        self._get_and_log_outputs(batch, "test")
 
     def configure_optimizers(self):
         return hydra.utils.instantiate(self.cfg.train_params.optimizer, params=self.parameters())

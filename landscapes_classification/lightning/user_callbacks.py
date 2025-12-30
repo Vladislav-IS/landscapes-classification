@@ -7,6 +7,10 @@ import pytorch_lightning as pl
 
 
 class GitCommitIdCallback(pl.callbacks.Callback):
+    """
+    Callback for logging git commit ID
+    """
+
     def __init__(self):
         try:
             repo = git.Repo(search_parent_directories=True)
@@ -30,6 +34,10 @@ class GitCommitIdCallback(pl.callbacks.Callback):
 
 
 class DrawPlotsCallback(pl.callbacks.Callback):
+    """
+    Callback for plotting train and validation losses and metrics
+    """
+
     def __init__(self, save_dir: Path):
         self.save_dir = save_dir
 
@@ -40,14 +48,14 @@ class DrawPlotsCallback(pl.callbacks.Callback):
             run_id = trainer.logger.run_id
             client = trainer.logger.experiment
             train_loss_history = client.get_metric_history(run_id, key="train_loss")
-            train_acc_history = client.get_metric_history(run_id, key="train_accuracy")
+            train_metric_history = client.get_metric_history(run_id, key="train_metric")
             val_loss_history = client.get_metric_history(run_id, key="val_loss")
-            val_acc_history = client.get_metric_history(run_id, key="val_accuracy")
+            val_metric_history = client.get_metric_history(run_id, key="val_metric")
             if (
                 not train_loss_history
-                or not train_acc_history
+                or not train_metric_history
                 or not val_loss_history
-                or not val_acc_history
+                or not val_metric_history
             ):
                 print(f"Warning: Didn't find all metrics in MLFlow-runner {run_id}")
                 return
@@ -55,10 +63,10 @@ class DrawPlotsCallback(pl.callbacks.Callback):
             ax[0][0].set_title("Train Loss")
             ax[0][1].plot([m.value for m in val_loss_history])
             ax[0][1].set_title("Validation Loss")
-            ax[1][0].plot([m.value for m in train_acc_history])
-            ax[1][0].set_title("Train Accuracy")
-            ax[1][1].plot([m.value for m in val_acc_history])
-            ax[1][1].set_title("Validation Accuracy")
+            ax[1][0].plot([m.value for m in train_metric_history])
+            ax[1][0].set_title("Train Metric")
+            ax[1][1].plot([m.value for m in val_metric_history])
+            ax[1][1].set_title("Validation Metric")
         elif isinstance(trainer.logger, pl.loggers.CSVLogger):
             try:
                 csv_file = Path(trainer.logger.log_dir) / "metrics.csv"
@@ -68,14 +76,14 @@ class DrawPlotsCallback(pl.callbacks.Callback):
                 return
             epochs = metrics["epoch"].drop_duplicates().to_list()
             train_loss_history = metrics["train_loss"].dropna().to_list()
-            train_acc_history = metrics["train_accuracy"].dropna().to_list()
+            train_metric_history = metrics["train_metric"].dropna().to_list()
             val_loss_history = metrics["val_loss"].dropna().to_list()
-            val_acc_history = metrics["val_accuracy"].dropna().to_list()
+            val_metric_history = metrics["val_metric"].dropna().to_list()
             if (
                 not train_loss_history
-                or not train_acc_history
+                or not train_metric_history
                 or not val_loss_history
-                or not val_acc_history
+                or not val_metric_history
             ):
                 print("Warning: Didn't find all metrics in CSV-file")
                 return
@@ -83,10 +91,10 @@ class DrawPlotsCallback(pl.callbacks.Callback):
             ax[0][0].set_title("Train Loss")
             ax[0][1].plot(epochs, val_loss_history)
             ax[0][1].set_title("Validation Loss")
-            ax[1][0].plot(epochs, train_acc_history)
-            ax[1][0].set_title("Train Accuracy")
-            ax[1][1].plot(epochs, val_acc_history)
-            ax[1][1].set_title("Validation Accuracy")
+            ax[1][0].plot(epochs, train_metric_history)
+            ax[1][0].set_title("Train Metric")
+            ax[1][1].plot(epochs, val_metric_history)
+            ax[1][1].set_title("Validation Metric")
         else:
             print("Warning: valid loggers not found")
             return
