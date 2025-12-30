@@ -1,6 +1,6 @@
 train_logger:
   _target_: pytorch_lightning.loggers.MLFlowLogger
-  tracking_uri: "http://127.0.0.1:5050" # 8080
+  tracking_uri: http://127.0.0.1:8080
   experiment_name: landscape-classification
   run_name: classifier
   save_dir: mlflow
