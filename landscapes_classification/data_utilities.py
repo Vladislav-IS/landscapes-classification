@@ -1,5 +1,5 @@
 import subprocess
-from typing import Any
+from typing import Any, List
 
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -22,7 +22,9 @@ def dvc_pull() -> None:
         return False
 
 
-def init_dataset(path: str, mode: str, size: int) -> ImageFolder:
+def init_dataset(
+    path: str, mode: str, size: int, mean: List[float], std: List[float]
+) -> ImageFolder:
     """
     Create dataset from raw data
 
@@ -32,6 +34,10 @@ def init_dataset(path: str, mode: str, size: int) -> ImageFolder:
     :type mode: str
     :param size: Size of image after preprocessing
     :type size: int
+    :param mean: Means by channel for image normalization
+    :type mean: List[float]
+    :param std: Stds by channel for image normalization
+    :type std: List[float]
     :return: Prepared PyTorch Dataset
     :rtype: ImageFolder
     """
@@ -41,10 +47,13 @@ def init_dataset(path: str, mode: str, size: int) -> ImageFolder:
                 transforms.RandomHorizontalFlip(),
                 transforms.Resize(size),
                 transforms.ToTensor(),
+                transforms.Normalize(mean, std),
             ]
         )
     else:
-        transformer = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
+        transformer = transforms.Compose(
+            [transforms.Resize(size), transforms.ToTensor(), transforms.Normalize(mean, std)]
+        )
     return ImageFolder(path, transformer)
 
 
