@@ -63,7 +63,7 @@ https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.effic
 
 | Модель          | Loss | Accuracy |
 | --------------- | ---- | -------- |
-| Бейзлайн        | 0.6  | 0.79     |
+| Бейзлайн        | 1.13 | 0.6      |
 | EfficientNet B3 | 0.21 | 0.93     |
 
 P.S. Реализованный пайплан обучения несколько отличается от того, что был описан
