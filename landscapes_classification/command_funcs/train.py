@@ -46,7 +46,11 @@ def train_command(cfg: DictConfig) -> None:
 
     trainer.fit(module, datamodule=datamodule)
     module = LandscapesModule.load_from_checkpoint(
-        str(repo_path / cfg.callbacks.dir_path / f"{cfg.callbacks.file_name}.ckpt"),
+        str(
+            repo_path
+            / cfg.callbacks.dir_path
+            / f"{cfg.callbacks.file_name}_{cfg.model.model_name}.ckpt"
+        ),
         weights_only=False,
     )
     torch.save(module.model.state_dict(), cfg.model.output_file)

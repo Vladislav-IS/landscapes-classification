@@ -66,11 +66,11 @@ class DrawPlotsCallback(pl.callbacks.Callback):
             except Exception:
                 print("Warning: Cannot find CSV-file with losses and metrics")
                 return
-            epochs = metrics["epoch"]
-            train_loss_history = metrics["train_loss"].to_list()
-            train_acc_history = metrics["train_accuracy"].to_list()
-            val_loss_history = metrics["val_loss"].to_list()
-            val_acc_history = metrics["val_accuracy"].to_list()
+            epochs = metrics["epoch"].drop_duplicates().to_list()
+            train_loss_history = metrics["train_loss"].dropna().to_list()
+            train_acc_history = metrics["train_accuracy"].dropna().to_list()
+            val_loss_history = metrics["val_loss"].dropna().to_list()
+            val_acc_history = metrics["val_accuracy"].dropna().to_list()
             if (
                 not train_loss_history
                 or not train_acc_history
