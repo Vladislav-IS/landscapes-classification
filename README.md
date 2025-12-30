@@ -60,7 +60,7 @@ https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.effic
 Результаты обучения моделей представлены в таблице:
 
 
-## Запуск проекта
+## Setup и Train
 
 ### Структура проекта
 
