@@ -208,8 +208,11 @@ __marimo__/
 
 # Other stuff
 *.txt
-*.png
+*.pth
+*.ckpt
 data/
 outputs/
 tensorboard/
 mlflow/
+csv_logs/
+checkpoints/
