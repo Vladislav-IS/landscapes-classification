@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 import fire
 from hydra import compose, initialize_config_dir
@@ -14,7 +14,7 @@ class Commands:
     Entrypoint class for train and inference functions
     """
 
-    def __init__(self, overrides: Optional[List[str]]):
+    def __init__(self, overrides: List[str]):
         self.overrides = overrides
 
     def train(self):
@@ -37,7 +37,7 @@ class Commands:
 def main():
     overrides = sys.argv[2:] if len(sys.argv) > 2 else []
     sys.argv = sys.argv[:2]
-    fire.Fire(Commands(overrides=overrides))
+    fire.Fire(Commands(overrides))
 
 
 if __name__ == "__main__":
