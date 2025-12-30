@@ -29,14 +29,14 @@ class LandscapesDataModule(pl.LightningDataModule):
     def train_dataloader(self):
         return data_utilities.init_dataloader(
             self.train_dataset,
-            self.cfg.train_params.batch_size,
+            self.cfg.train_params.train_batch_size,
             num_workers=self.cfg.train_params.num_workers,
         )
 
     def val_dataloader(self):
         return data_utilities.init_dataloader(
             self.val_dataset,
-            self.cfg.train_params.batch_size,
+            self.cfg.train_params.test_batch_size,
             shuffle=False,
             num_workers=self.cfg.train_params.num_workers,
         )
@@ -44,7 +44,7 @@ class LandscapesDataModule(pl.LightningDataModule):
     def test_dataloader(self):
         return data_utilities.init_dataloader(
             self.test_dataset,
-            self.cfg.train_params.batch_size,
+            self.cfg.train_params.test_batch_size,
             shuffle=False,
             num_workers=self.cfg.train_params.num_workers,
         )

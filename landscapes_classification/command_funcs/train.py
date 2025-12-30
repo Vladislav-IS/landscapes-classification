@@ -28,14 +28,16 @@ def train_command(cfg: DictConfig) -> None:
 
     logger = hydra.utils.instantiate(cfg.logging.train_logger)
 
+    model_checkpoint = ModelCheckpoint(
+        dirpath=str(repo_path / cfg.callbacks.dir_path),
+        filename=f"{cfg.callbacks.file_name}_{cfg.model.model_name}",
+        monitor="val_loss",
+        save_top_k=1,
+        every_n_epochs=1,
+    )
+
     callbacks = [
-        ModelCheckpoint(
-            dirpath=str(repo_path / cfg.callbacks.dir_path),
-            filename=f"{cfg.callbacks.file_name}_{cfg.model.model_name}",
-            monitor="val_loss",
-            save_top_k=1,
-            every_n_epochs=1,
-        ),
+        model_checkpoint,
         user_callbacks.GitCommitIdCallback(),
         user_callbacks.DrawPlotsCallback(repo_path / cfg.logging.plots.save_dir),
     ]
@@ -52,11 +54,7 @@ def train_command(cfg: DictConfig) -> None:
 
     trainer.fit(module, datamodule=datamodule)
     module = LandscapesModule.load_from_checkpoint(
-        str(
-            repo_path
-            / cfg.callbacks.dir_path
-            / f"{cfg.callbacks.file_name}_{cfg.model.model_name}.ckpt"
-        ),
-        weights_only=False,
+        model_checkpoint.best_model_path,
+        # weights_only=False,
     )
     torch.save(module.model.state_dict(), cfg.model.output_file)
