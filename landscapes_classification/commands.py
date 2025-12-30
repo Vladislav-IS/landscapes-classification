@@ -15,7 +15,7 @@ class Commands:
     """
 
     def __init__(self, overrides: List[str]):
-        self.overrides = overrides
+        self.overrides = [override for override in overrides if not override.startswith("--")]
 
     def train(self):
         with initialize_config_dir(
@@ -35,8 +35,14 @@ class Commands:
 
 
 def main():
-    overrides = sys.argv[2:] if len(sys.argv) > 2 else []
-    sys.argv = sys.argv[:2]
+    """
+    Separation of Hydra and Fire arguments
+    """
+    if len(sys.argv) > 2:
+        overrides = [argv for argv in sys.argv[2:] if not argv.startswith("--")]
+    else:
+        overrides = []
+    sys.argv = sys.argv[:2] + [argv for argv in sys.argv[2:] if argv.startswith("--")]
     fire.Fire(Commands(overrides))
 
 
