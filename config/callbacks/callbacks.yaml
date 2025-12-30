@@ -1,2 +1,2 @@
-dir_path: "checkpoints"
-file_name: "Best_model"
+dir_path: checkpoints
+file_name: best_model

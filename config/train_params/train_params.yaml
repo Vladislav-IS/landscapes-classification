@@ -15,7 +15,7 @@ optimizer:
 
 metric:
   _target_: torchmetrics.Accuracy
-  task: "multiclass"
+  task: multiclass
 
 criterion:
   _target_: torch.nn.CrossEntropyLoss

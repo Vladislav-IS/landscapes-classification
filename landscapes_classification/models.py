@@ -14,17 +14,9 @@ class BaselineNet(nn.Module):
             nn.BatchNorm2d(hidden_size),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(hidden_size, 2 * hidden_size, kernel_size=3, padding=1),
-            nn.BatchNorm2d(2 * hidden_size),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(2 * hidden_size, 4 * hidden_size, kernel_size=3, padding=1),
-            nn.BatchNorm2d(4 * hidden_size),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),
             nn.AdaptiveAvgPool2d(adaptive_pool_size),
             nn.Flatten(),
-            nn.Linear(hidden_size * 4 * adaptive_pool_size**2, num_classes),
+            nn.Linear(hidden_size * adaptive_pool_size**2, num_classes),
         )
 
     def forward(self, x):

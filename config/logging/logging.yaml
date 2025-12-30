@@ -1,14 +1,14 @@
 train_logger:
   _target_: pytorch_lightning.loggers.MLFlowLogger
   tracking_uri: "http://127.0.0.1:5050" # 8080
-  experiment_name: "landscape-classification"
-  run_name: "classifier"
-  save_dir: "mlflow"
+  experiment_name: landscape-classification
+  run_name: classifier
+  save_dir: mlflow
 
 test_logger:
   _target_: pytorch_lightning.loggers.CSVLogger
-  save_dir: "csv_logs"
-  name: "test_metrics"
+  save_dir: csv_logs
+  name: test_metrics
 
 plots:
   save_dir: plots
