@@ -9,7 +9,7 @@ from landscapes_classification.command_funcs.train import train_command
 
 class Commands:
     """
-    Entrypoint functions class
+    Entrypoint class for train and inference functions
     """
 
     def train(self):
