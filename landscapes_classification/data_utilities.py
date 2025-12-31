@@ -15,7 +15,7 @@ def dvc_pull() -> None:
     """
     print("Data folder not found. Downloading data from the S3 storage...")
     try:
-        subprocess.run(["dvc", "pull"], check=True, text=True, capture_output=True)
+        subprocess.run(["dvc", "pull"], check=True, capture_output=True)
         return True
     except Exception as e:
         print(f"Critical: DVC pull failed with error: {str(e)}")
