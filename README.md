@@ -181,8 +181,8 @@ poetry run python ./landscapes_classification/commands.py infer
 ```
 
 При запуске `commands.py` можно переопределять параметры конфигурации в
-командной строке. В этом случае новые параметры должны иметь вид
-`hydra_param=value`. Например, команда:
+командной строке (при этом в YAML-файлах останутся старые значения). В этом
+случае новые параметры должны иметь вид `hydra_param=value`. Например, команда:
 
 ```
 poetry run python .\landscapes_classification\commands.py train train_params.num_epochs=2 model.baseline_net.hidden_size=2
@@ -191,13 +191,14 @@ poetry run python .\landscapes_classification\commands.py train train_params.num
 Запустит обучение длительностью 2 эпохи с размерностью скрытого пространства
 бейзлайн-модели 2.
 
-Команда:
+А команда:
 
 ```
-poetry run python .\landscapes_classification\commands.py infer train_params.test_batch_size=128
+poetry run python .\landscapes_classification\commands.py infer train_params.test_batch_size=128 model.baseline_net.hidden_size=2
 ```
 
-Переопределит размер батча для тестового набора данных.
+Запустит инференс этой модели с другим размером батча для тестового набора
+данных.
 
 **ПРИМЕЧАНИЕ:** переоределяемые параметры должны быть записаны после названия
 команд train/infer.
