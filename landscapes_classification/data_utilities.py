@@ -1,5 +1,5 @@
 import subprocess
-from pathlib import Path
+import time
 from typing import Any, List
 
 from torch.utils.data import DataLoader
@@ -7,23 +7,27 @@ from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
 
-def dvc_pull() -> None:
+def dvc_pull(max_conn_tries) -> bool:
     """
     Pull the data from remote repository
 
-    :return:
+    :param conn_tries: Maximum number of connection tries
+    :type path: int
+    :return: Flag of success
     :rtype: bool
     """
     print("Info: Data folder not found. Downloading data from the S3 storage...")
-    repo_path = Path(__file__).parents[1]
-    result = subprocess.run(
-        ["dvc", "pull", "-j", "4"], capture_output=False, text=True, cwd=str(repo_path)
-    )
-    if result.returncode != 0:
-        print(f"Critical: DVC pull failed with error: {result.stderr}")
-        return False
-    print("Info: DVC data pulled successfully")
-    return True
+    result = None
+    for try_num in range(max_conn_tries):
+        print(f"Info: Trial {try_num}...")
+        result = subprocess.run(["dvc", "pull"], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("Info: DVC data pulled successfully")
+            return True
+        if try_num < max_conn_tries - 1:
+            time.sleep(10)
+    print(f"Critical: DVC pull failed with error: {result.stderr}")
+    return False
 
 
 def init_dataset(
