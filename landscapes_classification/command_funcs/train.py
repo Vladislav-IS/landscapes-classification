@@ -20,7 +20,7 @@ def train_command(cfg: DictConfig) -> None:
     """
     repo_path = Path(__file__).parents[2]
     full_data_path = repo_path / cfg.data.train_dir
-    if not full_data_path.is_dir() and not dvc_pull():
+    if not full_data_path.is_dir() and not dvc_pull(cfg.data.max_conn_tries):
         return
 
     datamodule = data_module.LandscapesDataModule(cfg)

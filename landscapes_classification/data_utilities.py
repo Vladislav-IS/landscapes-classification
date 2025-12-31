@@ -16,7 +16,9 @@ def dvc_pull() -> None:
     """
     print("Info: Data folder not found. Downloading data from the S3 storage...")
     repo_path = Path(__file__).parents[1]
-    result = subprocess.run(["dvc", "pull"], capture_output=True, text=True, cwd=str(repo_path))
+    result = subprocess.run(
+        ["dvc", "pull", "-j", "4"], capture_output=False, text=True, cwd=str(repo_path)
+    )
     if result.returncode != 0:
         print(f"Critical: DVC pull failed with error: {result.stderr}")
         return False
