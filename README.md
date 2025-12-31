@@ -191,6 +191,8 @@ poetry run python .\landscapes_classification\commands.py train train_params.num
 Запустит обучение длительностью 2 эпохи с размерностью скрытого пространства
 бейзлайн-модели 2.
 
+Команда:
+
 ```
 poetry run python .\landscapes_classification\commands.py infer train_params.test_batch_size=128
 ```
