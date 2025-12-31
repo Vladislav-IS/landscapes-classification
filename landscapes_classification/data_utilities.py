@@ -11,15 +11,15 @@ def dvc_pull(max_conn_tries) -> bool:
     """
     Pull the data from remote repository
 
-    :param conn_tries: Maximum number of connection tries
-    :type path: int
+    :param max_conn_tries: Maximum number of connection tries
+    :type max_conn_tries: int
     :return: Flag of success
     :rtype: bool
     """
     print("Info: Data folder not found. Downloading data from the S3 storage...")
     result = None
     for try_num in range(max_conn_tries):
-        print(f"Info: Trial {try_num}...")
+        print(f"Info: Trial {try_num + 1}...")
         result = subprocess.run(["dvc", "pull"], capture_output=True, text=True)
         if result.returncode == 0:
             print("Info: DVC data pulled successfully")
