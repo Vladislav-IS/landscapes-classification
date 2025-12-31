@@ -23,7 +23,9 @@ def infer_command(cfg: DictConfig) -> None:
         return
     datamodule = data_module.LandscapesDataModule(cfg)
     module = LandscapesModule(cfg)
-    module.model.load_state_dict(torch.load(cfg.model.output_file, weights_only=True))
+    module.model.load_state_dict(
+        torch.load(str(repo_path / cfg.model.output_file), weights_only=True)
+    )
     logger = hydra.utils.instantiate(cfg.logging.test_logger)
     trainer = pl.Trainer(
         accelerator="auto",

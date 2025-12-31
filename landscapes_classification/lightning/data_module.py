@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Optional
 
 import pytorch_lightning as pl
@@ -16,22 +17,23 @@ class LandscapesDataModule(pl.LightningDataModule):
         self.cfg = cfg
 
     def setup(self, stage: Optional[str] = None):
+        repo_path = Path(__file__).parents[2]
         self.train_dataset = data_utilities.init_dataset(
-            self.cfg.data.train_dir,
+            str(repo_path / self.cfg.data.train_dir),
             "train",
             self.cfg.train_params.img_size,
             self.cfg.train_params.norm_mean,
             self.cfg.train_params.norm_std,
         )
         self.val_dataset = data_utilities.init_dataset(
-            self.cfg.data.val_dir,
+            str(repo_path / self.cfg.data.val_dir),
             "val",
             self.cfg.train_params.img_size,
             self.cfg.train_params.norm_mean,
             self.cfg.train_params.norm_std,
         )
         self.test_dataset = data_utilities.init_dataset(
-            self.cfg.data.test_dir,
+            str(repo_path / self.cfg.data.test_dir),
             "test",
             self.cfg.train_params.img_size,
             self.cfg.train_params.norm_mean,
