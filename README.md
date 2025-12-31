@@ -185,6 +185,13 @@ poetry run python ./landscapes_classification/commands.py infer
 `hydra_param=value`. Например, команда:
 
 ```
+poetry run python .\landscapes_classification\commands.py train train_params.num_epochs=2 model.baseline_net.hidden_size=2
+```
+
+Запустит обучение длительностью 2 эпохи с размерностью скрытого пространства
+бейзлайн-модели 2.
+
+```
 poetry run python .\landscapes_classification\commands.py infer train_params.test_batch_size=128
 ```
 
