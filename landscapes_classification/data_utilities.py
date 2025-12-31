@@ -1,4 +1,5 @@
 import subprocess
+from pathlib import Path
 from typing import Any, List
 
 from torch.utils.data import DataLoader
@@ -14,12 +15,15 @@ def dvc_pull() -> None:
     :rtype: bool
     """
     print("Info: Data folder not found. Downloading data from the S3 storage...")
-    try:
-        subprocess.run(["dvc", "pull"], check=True, capture_output=True)
-        return True
-    except Exception as e:
-        print(f"Critical: DVC pull failed with error: {str(e)}")
+    repo_path = Path(__file__).parents[1]
+    result = subprocess.run(
+        ["dvc", "pull"], check=True, capture_output=True, text=True, cwd=str(repo_path)
+    )
+    if result.returncode != 0:
+        print(f"Critical: DVC pull failed with error: {result.stderr}")
         return False
+    print("Info: DVC data pulled successfully")
+    return True
 
 
 def init_dataset(
