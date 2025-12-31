@@ -137,13 +137,7 @@ poetry run pre-commit run -a
 
 Алгоритм обучения моделей:
 
-1. Активировать виртуальное окружение (если оно не было активировано):
-
-```
-poetry env activate
-```
-
-2. Запустить обучение модели:
+1. Запустить обучение модели:
 
 ```
 poetry run python ./landscapes_classification/commands.py train
@@ -152,7 +146,7 @@ poetry run python ./landscapes_classification/commands.py train
 **ПРИМЕЧАНИЕ:** Если данные не были загружены до запуска обучения или инференса,
 они скачаются автоматически.
 
-3. Запустить инференс модели на тестовой части датасета:
+2. Запустить инференс модели на тестовой части датасета:
 
 ```
 poetry run python ./landscapes_classification/commands.py infer
