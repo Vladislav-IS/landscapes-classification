@@ -13,7 +13,7 @@ def dvc_pull() -> None:
     :return:
     :rtype: bool
     """
-    print("Data folder not found. Downloading data from the S3 storage...")
+    print("Info: Data folder not found. Downloading data from the S3 storage...")
     try:
         subprocess.run(["dvc", "pull"], check=True, capture_output=True)
         return True
